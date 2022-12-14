@@ -1,0 +1,115 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+@inject IHttpContextAccessor context
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] Avalia Aê - Avaliação de instituições educacionais</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AvaliaAe.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+
+
+</head>
+<body>
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <img src="..." class="rounded me-2" alt="...">
+                <strong class="me-auto">Bootstrap</strong>
+                <small>11 mins ago</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Hello, world! This is a toast message.
+            </div>
+        </div>
+    </div>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom ">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/img/logos/logo.png" class="logo"/></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                   
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <div class="col text-center">
+                        <input class="form-control ml-3 box-shadow" placeholder="Pesquise uma instituição aqui"/>
+                    </div>
+                    <ul class="navbar-nav ms-auto">
+                        @if(context.HttpContext.Session.GetString("email") == null)
+                         {
+                         <li class="nav-item mx-3">
+                            <a class="btn btn-primary ml-3" asp-controller="Register" asp-action="Index"> <i class="bi bi-box-arrow-in-right"></i> <b>Cadastre-se</b> </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="btn btn-light text-dark border" asp-area="" asp-controller="Login" asp-action="Index" > <i class="bi bi-person-circle"></i> <b>Login</b></a>
+                         </li>
+                        }
+                        else
+                        {
+                         <li class="nav-item mx-3">
+                             <a class="btn btn-light border" asp-area="" asp-controller="MyProfile" asp-action=@(context.HttpContext.Session.GetString("type") == "user" ? "Profile" : "InstitutionProfile") asp-route-id=@context.HttpContext.Session.GetInt32("Id")> <i class="bi bi-person-circle"></i> <b>Meu Perfil</b></a>
+                        </li>
+                        <li class="nav-item ">
+                             <a class="btn btn-danger ml-3" asp-controller="Login" asp-action="Logout"> <i class="bi bi-box-arrow-in-right"></i> <b>Logout</b> </a>
+
+                         </li>
+                        }
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+        <nav class="navbar-sm navbar-expand-sm navbar-light bg-white border-bottom box-shadow ">
+                <ul class="navbar-nav text-center justify-content-center">
+                    @context.HttpContext.Session.GetString("name")
+                    <li class="nav-item me-5">
+                        <a class="nav-link" asp-controller="Institutions" asp-action="Index">Instituições</a>
+                    </li>
+                   
+                    <li class="nav-item me-5">
+                        <a class="nav-link" asp-controller="Ranking" asp-action="Index">Ranking</a>
+                    </li>
+                    <li class="nav-item me-5">
+                        <a class="nav-link" asp-controller="Doubt" asp-action="Index">Dúvidas</a>
+                    </li>
+                    <li class="nav-item me-5">
+                    <a class="nav-link" asp-controller="Institutions" asp-action="InsertNewInstitution">Cadastrar instituição</a>
+                    </li>
+                    <li class="nav-item me-5">
+                        <a class="nav-link" asp-controller="WeAre" asp-action="Index">Quem somos?</a>
+                    </li>
+                    <li class="nav-item me-5">
+                        <a class="nav-link" asp-controller="SearchCertification" asp-action="Index">Pesquisar certificação</a>
+                    </li>
+                    <li class="nav-item me-5">
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">Geral</a>
+                    </li>
+                </ul>
+            
+        </nav>
+    </header>
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+
+    <footer class="border-top footer text-muted bg-light">
+       <div class="container">
+          Avalia Ae! - @DateTime.Now.Year.ToString()
+
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    
+
+</body>
+</html>
